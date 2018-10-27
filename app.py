@@ -1,5 +1,6 @@
 import json
 from bson import json_util
+from bson.objectid import ObjectId
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_restful import reqparse, Api, Resource
@@ -33,7 +34,13 @@ class Planets(Resource):
         planets = planets_col.find()
         return json.loads(json_util.dumps(planets))
 
+class Planet(Resource):
+    def get(self, planet_id):
+        planet = planets_col.find({'_id': ObjectId(planet_id)})
+        return json.loads(json_util.dumps(planet))
+
 api.add_resource(Planets, '/')
+api.add_resource(Planet, '/<string:planet_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
