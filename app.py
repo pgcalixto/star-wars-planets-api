@@ -10,6 +10,9 @@ class Planets(Resource):
     def get(self):
         return planets
 
+    def put(self):
+        return planets
+
 api.add_resource(Planets, '/')
 
 if __name__ == '__main__':
