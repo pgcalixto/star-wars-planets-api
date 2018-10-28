@@ -1,5 +1,6 @@
 import json
 from bson import json_util
+from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from flask import Flask
 from flask_pymongo import PyMongo
@@ -36,7 +37,12 @@ class Planets(Resource):
 
 class Planet(Resource):
     def get(self, planet_id):
-        planet = planets_col.find({'_id': ObjectId(planet_id)})
+        planet = None
+        try:
+            # TODO set custom error message for 404
+            planet = planets_col.find_one_or_404({'_id': ObjectId(planet_id)})
+        except InvalidId as err:
+            return ({"message": str(err)}, 400)
         return json.loads(json_util.dumps(planet))
 
 api.add_resource(Planets, '/')
