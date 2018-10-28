@@ -45,8 +45,15 @@ class Planet(Resource):
             return ({"message": str(err)}, 400)
         return json.loads(json_util.dumps(planet))
 
+class PlanetByName(Resource):
+    def get(self, planet_name):
+        # TODO set custom error message for 404
+        planet = planets_col.find_one_or_404({'name': planet_name})
+        return json.loads(json_util.dumps(planet))
+
 api.add_resource(Planets, '/')
 api.add_resource(Planet, '/<string:planet_id>')
+api.add_resource(PlanetByName, '/name/<string:planet_name>')
 
 if __name__ == '__main__':
     app.run(debug=True)
