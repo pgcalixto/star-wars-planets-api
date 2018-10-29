@@ -49,3 +49,12 @@ def test_insert_planet(client):
     assert planet['terrain'] == response.json['terrain']
 
     pytest.planet_id = response.json['_id']['$oid']
+
+def test_delete_planet(client):
+    '''
+    Asserts that the previously inserted planet can be correctly removed.
+    '''
+    # delete the previously inserted planet
+    headers = {'content-type': 'application/json'}
+    response = client.delete('/planets/' + pytest.planet_id, headers=headers)
+    assert response.status_code == 204
