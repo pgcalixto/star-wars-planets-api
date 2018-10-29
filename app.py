@@ -30,11 +30,10 @@ class Planets(Resource):
         # insert planet
         planet = parser.parse_args()
         planet_id = planets_col.insert_one(planet).inserted_id
-        print(planet_id)
 
-        # return list of planets
-        planets = planets_col.find()
-        return json.loads(json_util.dumps(planets))
+        # return planet with its generated ID
+        planet['_id'] = {'$oid': str(planet_id)}
+        return planet, 201
 
 class PlanetByID(Resource):
     '''Resource for getting and removing planet by ID.'''
