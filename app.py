@@ -35,7 +35,7 @@ class Planets(Resource):
         planets = planets_col.find()
         return json.loads(json_util.dumps(planets))
 
-class Planet(Resource):
+class PlanetByID(Resource):
     def get(self, planet_id):
         planet = None
         try:
@@ -64,9 +64,9 @@ class PlanetByName(Resource):
         planet = planets_col.find_one_or_404({'name': planet_name})
         return json.loads(json_util.dumps(planet))
 
-api.add_resource(Planets, '/')
-api.add_resource(Planet, '/<string:planet_id>')
-api.add_resource(PlanetByName, '/name/<string:planet_name>')
+api.add_resource(Planets, '/planets')
+api.add_resource(PlanetByID, '/planets/<string:planet_id>')
+api.add_resource(PlanetByName, '/planets/name/<string:planet_name>')
 
 if __name__ == '__main__':
     app.run(debug=True)
