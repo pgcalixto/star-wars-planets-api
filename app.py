@@ -21,6 +21,7 @@ parser.add_argument('climate', required=True)
 parser.add_argument('terrain', required=True)
 
 class Planets(Resource):
+    '''Resource for getting planet list and insert new planets.'''
     def get(self):
         planets = planets_col.find()
         return json.loads(json_util.dumps(planets))
@@ -36,6 +37,7 @@ class Planets(Resource):
         return json.loads(json_util.dumps(planets))
 
 class PlanetByID(Resource):
+    '''Resource for getting and removing planet by ID.'''
     def get(self, planet_id):
         planet = None
         try:
@@ -59,6 +61,7 @@ class PlanetByID(Resource):
         return {'message': 'Unknown error.'}, 500
 
 class PlanetByName(Resource):
+    '''Resource for getting planet by name.'''
     def get(self, planet_name):
         # TODO set custom error message for 404
         planet = planets_col.find_one_or_404({'name': planet_name})
