@@ -46,12 +46,16 @@ class Planet(Resource):
         return json.loads(json_util.dumps(planet))
 
     def delete(self, planet_id):
-        result = planets_col.delete_one({'_id': ObjectId(planet_id)})
-        if result.acknowledged:
-            if result.deleted_count > 0:
-                return {'message': 'Planet successfully deleted.'}, 204
-            else:
-                return {'message': 'Planet not found by ID.'}, 404
+        try:
+            result = planets_col.delete_one({'_id': ObjectId(planet_id)})
+            if result.acknowledged is True:
+                if result.deleted_count > 0:
+                    return {'message': 'Planet successfully deleted.'}, 204
+                else:
+                    return {'message': 'Planet not found by ID.'}, 404
+        except InvalidId as err:
+            return ({"message": str(err)}, 400)
+
         return {'message': 'Unknown error.'}, 500
 
 class PlanetByName(Resource):
