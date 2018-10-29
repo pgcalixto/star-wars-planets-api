@@ -26,9 +26,9 @@ def client():
     test_app = app.test_client()
     yield test_app
 
-def test_get_planets_type(client):
+def test_get_planets_type(reset_client):
     '''Asserts that GET /planets returns 200 and a JSON list.'''
-    response = client.get('/planets')
+    response = reset_client.get('/planets')
     assert response.status_code == 200
     assert response.json == []
 
