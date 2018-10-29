@@ -45,6 +45,15 @@ class Planet(Resource):
             return ({"message": str(err)}, 400)
         return json.loads(json_util.dumps(planet))
 
+    def delete(self, planet_id):
+        result = planets_col.delete_one({'_id': ObjectId(planet_id)})
+        if result.acknowledged:
+            if result.deleted_count > 0:
+                return {'message': 'Planet successfully deleted.'}, 204
+            else:
+                return {'message': 'Planet not found by ID.'}, 404
+        return {'message': 'Unknown error.'}, 500
+
 class PlanetByName(Resource):
     def get(self, planet_name):
         # TODO set custom error message for 404
