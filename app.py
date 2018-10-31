@@ -1,4 +1,5 @@
 import json
+import swapi
 from bson import json_util
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
@@ -12,6 +13,12 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/starwars"
 api = Api(app)
 mongo = PyMongo(app)
 planets_col = mongo.db["planets"]
+
+# Previously store all planets from SWAPI
+planet_query = swapi.get_all("planets")
+planets = {}
+for p in planet_query.iter():
+    planets[p.name] = len(p.films)
 
 # TODO Request parsing will be discontinued from flask_restful. Change it to
 # another library which implements request parsing (e.g.: Marshmallow).
@@ -29,6 +36,9 @@ class Planets(Resource):
     def put(self):
         # insert planet
         planet = parser.parse_args()
+        planet['films'] = 0
+        if planet['name'] in planets:
+            planet['films'] = planets[planet['name']]
         planet_id = planets_col.insert_one(planet).inserted_id
 
         # return planet with its generated ID
