@@ -23,9 +23,11 @@ for p in planet_query.iter():
 # TODO Request parsing will be discontinued from flask_restful. Change it to
 # another library which implements request parsing (e.g.: Marshmallow).
 parser = reqparse.RequestParser()
-parser.add_argument('name', type=str, required=True, help='Name of the planet')
-parser.add_argument('climate', required=True)
-parser.add_argument('terrain', required=True)
+parser.add_argument('name', type=str, required=True, help='Name of the planet.')
+parser.add_argument('climate', type=str, required=True,
+                    help='Climate of the planet.')
+parser.add_argument('terrain', type=str, required=True,
+                    help='Terrain of the planet.')
 
 class Planets(Resource):
     '''Resource for getting planet list and insert new planets.'''
