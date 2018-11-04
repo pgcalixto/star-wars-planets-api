@@ -14,21 +14,6 @@ api = Api(app)
 mongo = PyMongo(app)
 planets_col = mongo.db["planets"]
 
-def getFilmsByPlanet():
-    '''Get number of Star Wars films by planet from SWAPI.
-
-    Query the Star Wars API (SWAPI) for the planets' information and returns a
-    list of Star Wars films number by planet.
-
-    Returns:
-        dict: Dictionary with planet name as key and film appearance count as
-              value.
-    '''
-    return {p.name: len(p.films) for p in swapi.get_all("planets").iter()}
-
-# Before starting the Flask API, store all films count by planets, from SWAPI.
-FILM_COUNT_BY_PLANET = getFilmsByPlanet()
-
 # TODO Request parsing will be discontinued from flask_restful. Change it to
 # another library which implements request parsing (e.g.: Marshmallow).
 parser = reqparse.RequestParser()
@@ -48,9 +33,18 @@ class Planets(Resource):
         # TODO check input validity (non-empty name)
         # insert planet
         planet = parser.parse_args()
-        planet['films'] = 0
-        if planet['name'] in FILM_COUNT_BY_PLANET:
-            planet['films'] = FILM_COUNT_BY_PLANET[planet['name']]
+
+        try:
+            response = requests.get("https://swapi.co/api/planets/",
+                                    {"search": planet.name})
+            if response.json()['count'] > 0:
+                planet['film_count'] = \
+                    len(response.json()['results'][0]['films'])
+            else:
+                planet['film_count'] = 0
+        except json.decoder.JSONDecodeError:
+            planet['film_count'] = 0
+
         planet_id = planets_col.insert_one(planet).inserted_id
 
         # return planet with its generated ID
