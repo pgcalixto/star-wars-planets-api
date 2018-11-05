@@ -45,6 +45,22 @@ def test_insert_planet(client):
     assert response.status_code == 201
     assert response.json == planet
 
+def test_get_planet_by_id(client):
+    '''
+    Asserts that a planet can be correctly retrieved by its ID.
+    '''
+    response = client.get('/planets/' + planet['_id']['$oid'])
+    assert response.status_code == 200
+    assert response.json == planet
+
+def test_get_planet_by_name(client):
+    '''
+    Asserts that a planet can be correctly retrieved by its name.
+    '''
+    response = client.get('/planets/name/' + planet['name'])
+    assert response.status_code == 200
+    assert response.json == planet
+
 def test_delete_planet(client):
     '''
     Asserts that the previously inserted planet can be correctly removed.
