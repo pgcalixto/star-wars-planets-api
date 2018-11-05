@@ -39,12 +39,11 @@ def test_insert_planet(client):
     headers = {'content-type': 'application/json'}
     response = client.put('/planets', data=json.dumps(planet), headers=headers)
 
-    assert response.status_code == 201
-    assert planet['name'] == response.json['name']
-    assert planet['climate'] == response.json['climate']
-    assert planet['terrain'] == response.json['terrain']
+    planet['_id'] = response.json['_id']
+    planet['film_count'] = response.json['film_count']
 
-    pytest.planet_id = response.json['_id']['$oid']
+    assert response.status_code == 201
+    assert response.json == planet
 
 def test_delete_planet(client):
     '''
@@ -52,5 +51,6 @@ def test_delete_planet(client):
     '''
     # delete the previously inserted planet
     headers = {'content-type': 'application/json'}
-    response = client.delete('/planets/' + pytest.planet_id, headers=headers)
+    response = client.delete('/planets/' + planet['_id']['$oid'],
+                             headers=headers)
     assert response.status_code == 204
