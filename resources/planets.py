@@ -51,7 +51,7 @@ class PlanetByID(Resource):
         try:
             result = db.get_one_by_id(planet_id)
             if result is None:
-                return 'Planet not found.', 404
+                return {'message': 'Planet not found by ID.'}, 404
             return json.loads(json_util.dumps(result))
         except InvalidId as err:
             return {"message": str(err)}, 400
@@ -73,5 +73,5 @@ class PlanetByName(Resource):
     def get(self, planet_name):
         planet = db.get_one_by_name(planet_name)
         if planet is None:
-            return 'Planet not found.', 404
+            return {'message': 'Planet not found by name.'}, 404
         return json.loads(json_util.dumps(planet))
