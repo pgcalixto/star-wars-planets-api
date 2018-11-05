@@ -1,5 +1,6 @@
 # star-wars-planets-api
-Basic Star Wars Planets API for insertion, removal and querying.
+Basic Star Wars Planets RESTful API for insertion, removal and querying of the Star
+Wars saga's planets.
 
 ## Requirements
 
@@ -8,6 +9,18 @@ Basic Star Wars Planets API for insertion, removal and querying.
   - flask
   - flask-restful
   - pytest
+
+## API
+
+* `/planets`
+  - `GET`: List all planets
+  - `PUT`: Insert a new planet data, containing name, terrain and climate in JSON
+  format
+* `/planets/<planet_id>`
+  - `GET`: Retrieve a single planet data by its unique ID.
+  - `DELETE`: Delete a planet by its unique ID.
+* `/planets/name/<planet_name>`
+  - `GET`: Retrieve a single planet data by its name.
 
 ## Executing
 
@@ -27,7 +40,7 @@ python3 -m pytest
 
 ## To-dos
 
-* Provide an API documentation
+* Document the API and use a tool to generate its documentation
 * Validate input data for HTTP requests and database operations
 * Change to a BDD tool for testing (e.g.: behave)
 * Add coverage tests
