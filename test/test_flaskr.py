@@ -70,3 +70,10 @@ def test_delete_planet(client):
     response = client.delete('/planets/' + planet['_id']['$oid'],
                              headers=headers)
     assert response.status_code == 204
+
+def test_get_after_delete(client):
+    '''
+    Asserts that the previously deleted planet can be accessed no more.
+    '''
+    response = client.delete('/planets/' + planet['_id']['$oid'])
+    assert response.status_code == 404
