@@ -27,8 +27,10 @@ python3 -m pytest
 
 ## To-dos
 
+* Provide an API documentation
 * Validate input data for HTTP requests and database operations
 * Change to a BDD tool for testing (e.g.: behave)
+* Add coverage tests
 * Integrate the code with a CI tool for testing (Travis, Jenkins, etc.)
 * Document all methods
 * Schedule a job for updating films count for planets in the database (make it
